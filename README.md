@@ -1,42 +1,50 @@
-## Program Description
+# Subtitle Translator Script
 
-This C program performs the following tasks:
+This program is designed to recursively traverse a directory, identify subtitle files with a specified suffix (e.g., "_en.srt"), and translate their content from English to Russian using the `trans` command-line tool. The translated subtitles are saved as new files with the suffix "_ru.srt". Additionally, the program renames the original files by appending an underscore to their names.
 
-1. **Directory Path Determination:** If the first command-line argument is specified, the program uses it as the directory path. Otherwise, it operates in the current directory.
+## Features
+- **Recursive directory traversal**: The script can process subtitle files in subdirectories.
+- **Translation of subtitle content**: Only text that is not a number or timestamp is translated.
+- **Suffix management**: Original subtitle files are renamed by adding an underscore.
+- **Multi-file support**: The program handles multiple files in one execution.
 
-2. **Counting the Number of Files for Translation and Maximum Filename Length:** The program recursively traverses the directory and its subdirectories, counting the number of files ending with "_en.srt" and determining the maximum filename length.
+## Dependencies
+- `trans`: Command-line tool for translation. The script uses `trans` to translate subtitles from English to Russian.
+- A Unix-like environment (Linux/macOS).
 
-3. **Saving File Names for Translation in an Array:** The program saves the names of files for translation in a dynamic array `file_names_array`.
+## How It Works
+1. The program searches for subtitle files ending with the suffix `_en.srt` within the specified directory or the current directory if no path is provided.
+2. It reads each subtitle file and translates its content line by line, except for numbers (e.g., subtitle indices) and timestamps (e.g., `00:01:23 --> 00:01:26`).
+3. Translated content is saved into new subtitle files with the suffix `_ru.srt`.
+4. Original subtitle files are renamed by appending an underscore to their names.
+5. The script outputs information such as the number of files processed and the time taken for each translation.
 
-4. **Translation and Writing to a File:** For each file, the program uses the external "trans" command to translate the lines inside the file from English to Russian. The translated text is saved in a new file.
+## Usage
+To run the script, simply compile it and execute it with the directory path as an argument.
 
-5. **Adding "_" to File Names:** The original file names have "_" added to them, and the files are renamed.
+```bash
+gcc -o subtitle_translator subtitle_translator.c
+./subtitle_translator /path/to/subtitles
+```
 
-6. **Measuring Execution Time:** The total execution time of the program is measured using the `sys/time.h` library. The time is displayed in milliseconds.
+If no directory path is provided, it will default to the current directory.
 
-The program uses standard C libraries as well as libraries for file handling (`stdio.h`), string operations (`string.h`), directory operations (`dirent.h`), dynamic memory (`stdlib.h`), time (`sys/time.h`), character operations (`ctype.h`), and processes (`unistd.h`).
+## Example
+Assume you have a directory with English subtitle files ending in `_en.srt`. The script will:
+- Translate them to Russian and save them with the suffix `_ru.srt`.
+- Rename the original files by adding an underscore at the end.
 
-It also includes auxiliary functions for working with files, strings, and time.
+For instance:
+- `movie_en.srt` → `movie_ru.srt` (translated)
+- `movie_en.srt` → `movie_en.srt_` (original file renamed)
 
-
-## Описание программы
-
-Данная программа на языке C выполняет следующие задачи:
-
-1. **Определение пути к директории:** Если в командной строке указан первый аргумент, то программа использует его как путь к директории. В противном случае, программа работает в текущей директории.
-
-2. **Подсчет количества файлов для перевода и максимальной длины имени файла:** Программа рекурсивно проходит по директории и её поддиректориям, подсчитывая количество файлов, оканчивающихся на "_en.srt", и определяет максимальную длину имени файла.
-
-3. **Сохранение имен файлов для перевода в массив:** Программа сохраняет имена файлов для перевода в динамический массив `file_names_array`.
-
-4. **Перевод и запись в файл:** Для каждого файла программа использует внешнюю команду "trans" для перевода строк внутри файла с английского на русский язык. Переведенный текст сохраняется в новый файл.
-
-5. **Добавление символа "_" к именам файлов:** К оригинальным именам файлов добавляется символ "_", и файлы переименовываются.
-
-6. **Измерение времени выполнения:** Измеряется общее время выполнения программы с использованием библиотеки `sys/time.h`. Время выводится в миллисекундах.
-
-Программа использует стандартные библиотеки C, а также библиотеки для работы с файлами (`stdio.h`), строками (`string.h`), директориями (`dirent.h`), динамической памятью (`stdlib.h`), временем (`sys/time.h`), символьными операциями (`ctype.h`), и процессами (`unistd.h`).
-
-Она также включает в себя вспомогательные функции для работы с файлами, строками и временем.
-
-
+## Functions
+- `save_files_in_array`: Recursively collects the names of files with a specific suffix from the directory.
+- `save_path_name`: Extracts the directory path from command-line arguments or defaults to the current directory.
+- `find_the_number_of_files_and_the_maximum_filename_length`: Counts the number of files for translation and identifies the longest file name.
+- `translate_and_write`: Translates the content of a subtitle file and writes the result to a new file.
+- `add_underscore_to_filename`: Renames the original file by appending an underscore.
+- `replaceSubstring`: Replaces a substring in a string with another substring (used for changing suffixes in file names).
+  
+## License
+This project is licensed under the MIT License.
